@@ -201,6 +201,8 @@ proc selectCar
     row := 1 + (posx - 30) div 75
     col := 1 + (posy - 30) div 75
     selectedCar := ^grid.getSquare (row, col)
+    // here you probably want this to instead get the car that is on the grid square, and not the name.
+ 
     put selectedCar
 end selectCar
 
