@@ -96,7 +96,12 @@ class Car
         if CheckSpace (x, y) = true then
             carX := x
             carY := y
-            Grid (carX) (carY) := CarType
+            Grid (carX) (carY) := CarType // here you want to set this to a pointer to the car itself, 
+                                          // and not the car type probably, because then you can easily move it later :) 
+                                          // something like
+
+            var Car = ^this;              // No idea if you can do this in Turing, but it is an idea
+            Grid (carX) (carY) := Car
             locate (10, 10)
             %put "x: ", x, " y: ", y, " Grid: ", carX, ":", carY, " direction ", direction
         else
