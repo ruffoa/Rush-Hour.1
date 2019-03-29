@@ -1,195 +1,55 @@
-%unit
-%class Grid
-import GRID in "GRID.t", Move in "Move.t", Car in "Car.t"
+unit
+class Move
+    inherit Car in "Car.t"
+    import GRID in "GRID.t"
+    export MoveUp, MoveDown, MoveLeft, MoveRight
 
-%export
-
-var posx : int
-var posy : int
-var dummy1 : int
-var dummy2 : int
-var row : int
-var col : int
-var selectedCar : string
-var selectedCarObject : ^Move
-
-var redCar : ^Move
-var pinkTruck1 : ^Move
-var pinkTruck2 : ^Move
-var purpleTruck1 : ^Move
-var greenCar1 : ^Move
-var greenCar2 : ^Move
-var blueCar1 : ^Move
-var purpleCar1 : ^Move
-
-new redCar
-new pinkTruck1
-new pinkTruck2
-new purpleTruck1
-new greenCar1
-new greenCar2
-new blueCar1
-new purpleCar1
-
-var grid : ^GRID
-var Grid : array 1 .. 6 of array 1 .. 6 of string
-
-new grid
-Grid := ^grid.getGrid
-%if Grid (1) (1) = empty then
-%^grid.resetGrid
-%Grid := ^grid.getGrid
-%end if
-
-procedure MainGraphics
-    setscreen ("graphics:700;600")
-    var font_title := Font.New ("phosphate:75")
-    var font_sub := Font.New ("copperplate:22")
-    var font_button := Font.New ("times:18")
-    Draw.FillBox (30, 30, 480, 480, 8)
-    Draw.FillBox (480, 255, 555, 330, 8)
-    Draw.Box (480, 255, 555, 330, black)
-    for i : 0 .. 6
-        Draw.Line (30 + i * 75, 30, 30 + i * 75, 480, black)
-        Draw.Line (30, 30 + i * 75, 480, 30 + i * 75, black)
-    end for
-    Draw.Text ("Rush Hour", 100, 510, font_title, 8)
-
-    Draw.FillBox (540, 80, 670, 120, 8)
-    Draw.Box (540, 80, 670, 120, black)
-    Draw.Text ("Restart", 574, 93, font_button, black)
-
-    Draw.FillBox (540, 30, 670, 70, 8)
-    Draw.Box (540, 30, 670, 70, black)
-    Draw.Text ("Menu", 578, 43, font_button, black)
-
-    Draw.FillBox (540, 130, 670, 170, 8)
-    Draw.Box (540, 130, 670, 170, black)
-    Draw.Text ("Instructions", 550, 143, font_button, black)
-
-    Draw.FillBox (560, 400, 600, 440, 8)
-    Draw.Box (560, 400, 600, 440, black)
-    Draw.ThickLine (568, 410, 580, 430, 3, black)
-    Draw.ThickLine (592, 410, 580, 430, 3, black)
-
-    Draw.FillBox (560, 350, 600, 390, 8)
-    Draw.Box (560, 350, 600, 390, black)
-    Draw.ThickLine (568, 380, 580, 360, 3, black)
-    Draw.ThickLine (592, 380, 580, 360, 3, black)
-
-    Draw.FillBox (510, 350, 550, 390, 8)
-    Draw.Box (510, 350, 550, 390, black)
-    Draw.ThickLine (542, 380, 518, 370, 3, black)
-    Draw.ThickLine (542, 360, 518, 370, 3, black)
-
-    Draw.FillBox (610, 350, 650, 390, 8)
-    Draw.Box (610, 350, 650, 390, black)
-    Draw.ThickLine (618, 380, 642, 370, 3, black)
-    Draw.ThickLine (618, 360, 642, 370, 3, black)
-
-end MainGraphics
-
-%end Grid
-%Car pos - row then col
-MainGraphics
-
-
-^redCar.SetGrid (grid)
-^redCar.SetCarTitle ("redCar")
-^redCar.SetCarColor (12)
-^redCar.SetCarType (2, 2)
-^redCar.SetCarPosition (2, 4)
-^redCar.DrawCar
-
-^pinkTruck1.SetGrid (grid)
-^pinkTruck1.SetCarTitle ("pinkTruck1")
-^pinkTruck1.SetCarType (3, 1)
-^pinkTruck1.SetCarPosition (3, 5)
-^pinkTruck1.DrawCar
-
-^pinkTruck2.SetGrid (grid)
-^pinkTruck2.SetCarTitle ("pinkTruck2")
-^pinkTruck2.SetCarType (3, 1)
-^pinkTruck2.SetCarPosition (5, 5)
-^pinkTruck2.DrawCar
-
-^purpleTruck1.SetGrid (grid)
-^purpleTruck1.SetCarTitle ("purpleTruck1")
-^purpleTruck1.SetCarColor (34)
-^purpleTruck1.SetCarType (3, 1)
-^purpleTruck1.SetCarPosition (6, 6)
-^purpleTruck1.DrawCar
-
-^greenCar1.SetGrid (grid)
-^greenCar1.SetCarTitle ("greenCar1")
-^greenCar1.SetCarColor (72)
-^greenCar1.SetCarType (2, 2)
-^greenCar1.SetCarPosition (2, 3)
-^greenCar1.DrawCar
-
-^greenCar2.SetGrid (grid)
-^greenCar2.SetCarTitle ("greenCar2")
-^greenCar2.SetCarColor (72)
-^greenCar2.SetCarType (2, 2)
-^greenCar2.SetCarPosition (4, 1)
-^greenCar2.DrawCar
-
-^blueCar1.SetGrid (grid)
-^blueCar1.SetCarTitle ("blueCar1")
-^blueCar1.SetCarColor (55)
-^blueCar1.SetCarType (2, 1)
-^blueCar1.SetCarPosition (2, 2)
-^blueCar1.DrawCar
-
-^purpleCar1.SetGrid (grid)
-^purpleCar1.SetCarTitle ("purpleCar1")
-^purpleCar1.SetCarColor (34)
-^purpleCar1.SetCarType (2, 1)
-^purpleCar1.SetCarPosition (1, 2)
-^purpleCar1.DrawCar
-
-proc buttonControls (carName : ^Move)
-    loop
-        Mouse.ButtonWait ("down", posx, posy, dummy1, dummy2)
-        if posx < 560 and posx > 600 and posy > 400 and posy < 440 then
-            ^ carName.MoveUp
-        elsif posx < 560 and posx > 600 and posy > 350 and posy < 390 then
-            ^carName.MoveDown
-        elsif posx < 510 and posx > 550 and posy > 350 and posy < 390 then
-            ^carName.MoveLeft
-        elsif posx < 610 and posx > 650 and posy > 400 and posy < 440 then
-            ^carName.MoveRight
+    proc MoveUp
+        var TempCarType : string := CarType
+        if CheckSpaceMove (carX, carY + 1) = true then
+            EraseCar
+            CarType := ""
+            SetMasterGrid
+            CarType := TempCarType
+            carY += 1
+            DrawCar
         end if
-    end loop
-end buttonControls
+    end MoveUp
 
-proc selectCar
-    loop
-        Mouse.ButtonWait ("down", posx, posy, dummy1, dummy2)
-        row := 1 + (posx - 30) div 75
-        col := 1 + (posy - 30) div 75
-        exit when posx > 30 and posx < 480 and posy > 30 and posy < 480 and ^grid.getSquare (row, col) ~= ""
-    end loop
-    Draw.FillOval (posx, posy, 10, 10, black)
-    row := 1 + (posx - 30) div 75
-    col := 1 + (posy - 30) div 75
-    selectedCar := ^grid.getSquare (row, col)
-    put selectedCar
-end selectCar
+    proc MoveDown
+        var TempCarType : string := CarType
+        if CheckSpaceMove (carX, carY - carSize) = true then
+            EraseCar
+            CarType := ""
+            SetMasterGrid
+            CarType := TempCarType
+            carY -= 1
+            DrawCar
+        end if
+    end MoveDown
 
-function nameToObject (CarName : string) :^Move
-%selectedCarObject
-end nameToObject
+    proc MoveLeft
+        var TempCarType : string := CarType
+        if CheckSpaceMove (carX - carSize, carY) = true then
+            EraseCar
+            CarType := ""
+            SetMasterGrid
+            CarType := TempCarType
+            carX -= 1
+            DrawCar
+        end if
+    end MoveLeft
 
-^pinkTruck1.MoveDown
-^pinkTruck1.MoveDown
+    proc MoveRight
+        var TempCarType : string := CarType
+        if CheckSpaceMove (carX + 1, carY) = true then
+            EraseCar
+            CarType := ""
+            SetMasterGrid
+            CarType := TempCarType
+            carX += 1
+            DrawCar
+        end if
+    end MoveRight
 
-
-%Draw.FillBox (30, 30, 480, 480, 8)
-%Draw.FillBox (480, 255, 555, 330, 8)
-%Draw.Box (480, 255, 555, 330, black)
-%for i : 0 .. 6
-%    Draw.Line (30 + i * 75, 30, 30 + i * 75, 480, black)
-%    Draw.Line (30, 30 + i * 75, 480, 30 + i * 75, black)
-%end for
-%Draw.Text ("Rush Hour", 100, 510, font_title, 8)
+end Move
