@@ -2,7 +2,7 @@
 %class Grid
 import GRID in "GRID.t", Move in "Move.t", Car in "Car.t"
 
-%export
+%%% GLOBAL VARIABLES %%%
 
 var posx : int
 var posy : int
@@ -41,6 +41,28 @@ Grid := ^grid.getGrid
 %Grid := ^grid.getGrid
 %end if
 
+function choose_mode : int
+    setscreen ("graphics:700;600")
+    var font_title := Font.New ("phosphate:90")
+    var font_button1 := Font.New ("times:18")
+    var font1 := Font.New ("phosphate:20")
+
+    Draw.FillBox (0, 0, 700, 600, 8)
+    Draw.Text ("Rush Hour", 60, 300, font_title, black)
+
+    Draw.FillBox (300, 210, 400, 270, white)
+    Draw.Text ("Start!", 312, 230, font1, black)
+
+    loop
+        Mouse.ButtonWait ("down", posx, posy, dummy1, dummy2)
+        if posx > 8 and posx < 144 and posy > 340 and posy < 380 then
+            result 1
+        elsif posx > 156 and posx < 292 and posy > 340 and posy < 380 then
+            result 2
+        end if
+    end loop
+end choose_mode
+
 procedure MainGraphics
     setscreen ("graphics:700;600")
     var font_title := Font.New ("phosphate:75")
@@ -54,6 +76,7 @@ procedure MainGraphics
         Draw.Line (30, 30 + i * 75, 480, 30 + i * 75, black)
     end for
     Draw.Text ("Rush Hour", 100, 510, font_title, 8)
+    Draw.Text ("EXIT", 490, 287, font_button, black)
 
     Draw.FillBox (540, 80, 670, 120, 8)
     Draw.Box (540, 80, 670, 120, black)
@@ -91,8 +114,17 @@ end MainGraphics
 
 %end Grid
 %Car pos - row then col
-MainGraphics
 
+proc get_start
+loop
+var number : int := choose_mode
+
+end loop
+end get_start
+
+%get_start
+
+MainGraphics
 
 ^redCar.SetGrid (grid)
 ^redCar.SetCarTitle ("redCar")
@@ -100,18 +132,21 @@ MainGraphics
 ^redCar.SetCarType (2, 2)
 ^redCar.SetCarPosition (2, 4)
 ^redCar.DrawCar
+Grid := ^grid.getGrid
 
 ^pinkTruck1.SetGrid (grid)
 ^pinkTruck1.SetCarTitle ("pinkTruck1")
 ^pinkTruck1.SetCarType (3, 1)
 ^pinkTruck1.SetCarPosition (3, 5)
 ^pinkTruck1.DrawCar
+Grid := ^grid.getGrid
 
 ^pinkTruck2.SetGrid (grid)
 ^pinkTruck2.SetCarTitle ("pinkTruck2")
 ^pinkTruck2.SetCarType (3, 1)
 ^pinkTruck2.SetCarPosition (5, 5)
 ^pinkTruck2.DrawCar
+Grid := ^grid.getGrid
 
 ^purpleTruck1.SetGrid (grid)
 ^purpleTruck1.SetCarTitle ("purpleTruck1")
@@ -119,6 +154,8 @@ MainGraphics
 ^purpleTruck1.SetCarType (3, 1)
 ^purpleTruck1.SetCarPosition (6, 6)
 ^purpleTruck1.DrawCar
+Grid := ^grid.getGrid
+
 
 ^greenCar1.SetGrid (grid)
 ^greenCar1.SetCarTitle ("greenCar1")
@@ -126,6 +163,7 @@ MainGraphics
 ^greenCar1.SetCarType (2, 2)
 ^greenCar1.SetCarPosition (2, 3)
 ^greenCar1.DrawCar
+Grid := ^grid.getGrid
 
 ^greenCar2.SetGrid (grid)
 ^greenCar2.SetCarTitle ("greenCar2")
@@ -133,6 +171,7 @@ MainGraphics
 ^greenCar2.SetCarType (2, 2)
 ^greenCar2.SetCarPosition (4, 1)
 ^greenCar2.DrawCar
+Grid := ^grid.getGrid
 
 ^blueCar1.SetGrid (grid)
 ^blueCar1.SetCarTitle ("blueCar1")
@@ -140,6 +179,7 @@ MainGraphics
 ^blueCar1.SetCarType (2, 1)
 ^blueCar1.SetCarPosition (2, 2)
 ^blueCar1.DrawCar
+Grid := ^grid.getGrid
 
 ^purpleCar1.SetGrid (grid)
 ^purpleCar1.SetCarTitle ("purpleCar1")
@@ -147,21 +187,8 @@ MainGraphics
 ^purpleCar1.SetCarType (2, 1)
 ^purpleCar1.SetCarPosition (1, 2)
 ^purpleCar1.DrawCar
+Grid := ^grid.getGrid
 
-proc buttonControls (carName : ^Move)
-    loop
-        Mouse.ButtonWait ("down", posx, posy, dummy1, dummy2)
-        if posx < 560 and posx > 600 and posy > 400 and posy < 440 then
-            ^ carName.MoveUp
-        elsif posx < 560 and posx > 600 and posy > 350 and posy < 390 then
-            ^carName.MoveDown
-        elsif posx < 510 and posx > 550 and posy > 350 and posy < 390 then
-            ^carName.MoveLeft
-        elsif posx < 610 and posx > 650 and posy > 400 and posy < 440 then
-            ^carName.MoveRight
-        end if
-    end loop
-end buttonControls
 
 proc selectCar
     loop
@@ -177,19 +204,30 @@ proc selectCar
     put selectedCar
 end selectCar
 
-function nameToObject (CarName : string) :^Move
-%selectedCarObject
+proc buttonControls (carName : ^Move)
+    loop
+        Mouse.ButtonWait ("down", posx, posy, dummy1, dummy2)
+        if posx < 560 and posx > 600 and posy > 400 and posy < 440 then
+            ^carName.MoveUp
+        elsif posx < 560 and posx > 600 and posy > 350 and posy < 390 then
+            ^carName.MoveDown
+        elsif posx < 510 and posx > 550 and posy > 350 and posy < 390 then
+            ^carName.MoveLeft
+        elsif posx < 610 and posx > 650 and posy > 400 and posy < 440 then
+            ^carName.MoveRight
+        end if
+    end loop
+end buttonControls
+
+function nameToObject (CarName : string) : ^Move
+    %selectedCarObject
 end nameToObject
 
-^pinkTruck1.MoveDown
-^pinkTruck1.MoveDown
+proc printGrid
+    for i : 1 .. 6
+        for j : 1 .. 6
+            put Grid (i) (j) ..
+        end for
+    end for
+end printGrid
 
-
-%Draw.FillBox (30, 30, 480, 480, 8)
-%Draw.FillBox (480, 255, 555, 330, 8)
-%Draw.Box (480, 255, 555, 330, black)
-%for i : 0 .. 6
-%    Draw.Line (30 + i * 75, 30, 30 + i * 75, 480, black)
-%    Draw.Line (30, 30 + i * 75, 480, 30 + i * 75, black)
-%end for
-%Draw.Text ("Rush Hour", 100, 510, font_title, 8)
